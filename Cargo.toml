@@ -1,0 +1,6 @@
+[package]
+name = "dardan_ui"
+version = "0.1.0"
+authors = ["Dardan <mail@dardan.im>"]
+[dependencies]
+sdl2 = "*"
