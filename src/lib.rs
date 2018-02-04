@@ -9,8 +9,14 @@ pub use base::UiElement;
 pub use base::UiContainer;
 pub use base::UiAttribute;
 pub use base::UiPair;
+pub use base::NoParamInit;
+pub use base::NoSharedVars;
 
 mod app;
 pub use app::UiApp;
+//pub type UiApp<T: UiContainer + NoParamInit> = UiApp<T, NoSharedVars>;
 
 pub mod containers;
+use containers::UiFreeContainer;
+
+pub type UiApplication = UiApp<UiFreeContainer, NoSharedVars>;

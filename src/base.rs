@@ -4,8 +4,8 @@ use Color;
 
 
 pub enum UiAttribute {
-    BackgroundColor(Option<Color>),
-    TextColor(Option<Color>),
+    BackgroundColor(Color),
+    TextColor(Color),
 }
 
 pub struct UiPair<T> {
@@ -26,7 +26,23 @@ pub trait UiElement {
     fn draw_ui(&self, canvas: &mut Canvas<Window>, pos: &UiPair<i32>) {
         self.draw(canvas, pos);
     }
+
+    fn draw_me(&self, canvas: &mut Canvas<Window>, pos: &UiPair<i32>) {
+        self.draw_ui(canvas, pos);
+    }
     fn set_size(&mut self, size: &UiPair<u32>);
+}
+
+pub trait NoParamInit {
+    fn new() -> Self;
+}
+
+pub struct NoSharedVars {}
+
+impl NoParamInit for NoSharedVars {
+    fn new() -> Self {
+        NoSharedVars {}
+    }
 }
 
 pub trait UiContainer: UiElement {

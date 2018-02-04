@@ -1,11 +1,4 @@
-use Color;
-use Canvas;
-use Window;
-use Rect;
-use UiElement;
-use UiContainer;
-use UiAttribute;
-use UiPair;
+use {Canvas, Color, NoParamInit, Rect, UiAttribute, UiContainer, UiElement, UiPair, Window};
 
 pub struct UiFreeContainer {
     background: Color,
@@ -13,8 +6,8 @@ pub struct UiFreeContainer {
     size: UiPair<u32>,
 }
 
-impl UiFreeContainer {
-    pub fn new() -> Self {
+impl NoParamInit for UiFreeContainer {
+    fn new() -> Self {
         UiFreeContainer {
             background: Color {
                 r: 122,
@@ -37,7 +30,7 @@ impl UiElement for UiFreeContainer {
 
     fn set_attribute(&mut self, attribute: UiAttribute) {
         match attribute {
-            UiAttribute::BackgroundColor(x) => self.background = x.unwrap(),
+            UiAttribute::BackgroundColor(x) => self.background = x,
             _ => {}
         }
     }
