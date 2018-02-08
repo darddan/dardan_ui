@@ -1,11 +1,37 @@
-use Canvas;
-use Window;
-use Color;
+use std::rc::Rc;
+use std::cell::RefCell;
+use sdl2::render::Canvas;
+use sdl2::video::Window;
+use sdl2::pixels::Color;
 
+pub struct UiColor {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+    pub a: u8,
+}
 
-pub enum UiAttribute {
-    BackgroundColor(Color),
-    TextColor(Color),
+impl UiColor {
+    pub fn sdl2(&self) -> Color {
+        Color::RGBA(self.r, self.g, self.b, self.a)
+    }
+    pub fn new(r: u8, g: u8, b: u8, a: u8) -> Self {
+        UiColor { r, g, b, a }
+    }
+    // Color names taken from:
+    // https://graf1x.com/wp-content/uploads/2017/06/list-of-colors-and-color-names.jpg
+    pub fn red() -> Self {
+        UiColor::new(0xD3, 0x00, 0x00, 0xFF)
+    }
+    pub fn green() -> Self {
+        UiColor::new(0x3B, 0xB1, 0x43, 0xFF)
+    }
+    pub fn blue() -> Self {
+        UiColor::new(0x00, 0x18, 0xF9, 0xFF)
+    }
+    pub fn salmon() -> Self {
+        UiColor::new(0xFA, 0x80, 0x72, 0xFF)
+    }
 }
 
 pub struct UiPair<T> {
@@ -13,44 +39,73 @@ pub struct UiPair<T> {
     pub y: T,
 }
 
-pub trait UiElement {
-    fn init(&self);
-    fn draw(&self, canvas: &mut Canvas<Window>, pos: &UiPair<i32>);
-    fn get_parent(&self) -> Option<Box<UiContainer>>;
-    fn set_attribute(&mut self, attribute: UiAttribute);
-    fn set_attributes(&mut self, attributes: Vec<UiAttribute>) {
-        for attribute in attributes {
-            self.set_attribute(attribute);
+impl Clone for UiPair<u32> {
+    fn clone(&self) -> Self {
+        UiPair {
+            x: self.x,
+            y: self.y,
         }
     }
-    fn draw_ui(&self, canvas: &mut Canvas<Window>, pos: &UiPair<i32>) {
-        self.draw(canvas, pos);
-    }
-
-    fn draw_me(&self, canvas: &mut Canvas<Window>, pos: &UiPair<i32>) {
-        self.draw_ui(canvas, pos);
-    }
-    fn set_size(&mut self, size: &UiPair<u32>);
 }
 
-pub trait NoParamInit {
-    fn new() -> Self;
+impl UiPair<i32> {
+    pub fn new_i32() -> Self {
+        UiPair { x: 0, y: 0 }
+    }
 }
-
-pub struct NoSharedVars {}
-
-impl NoParamInit for NoSharedVars {
-    fn new() -> Self {
-        NoSharedVars {}
+impl UiPair<u32> {
+    pub fn new_u32() -> Self {
+        UiPair { x: 0, y: 0 }
     }
 }
 
-pub trait UiContainer: UiElement {
-    fn get_children(&self) -> &Vec<Box<UiElement>>;
-    fn draw_ui(&self, canvas: &mut Canvas<Window>, pos: &UiPair<i32>) {
-        self.draw(canvas, pos);
-        for i in self.get_children().iter() {
-            i.draw_ui(canvas, pos);
+pub enum UiAttr {
+    BackgroundColor(UiColor),
+    TextColor(UiColor),
+    Size(UiPair<u32>),
+    Title(String),
+    Direction(UiDirection),
+}
+
+pub enum UiRelSize {
+    Inherit,
+    Max,
+    Rel(u8), // value between 0 and 100 (Percent)
+    Px(u32),
+}
+
+#[derive(PartialEq)]
+pub enum UiDirection {
+    Horizontal,
+    Vertical,
+}
+
+pub enum UiSetParam {
+    Attr(UiAttr),
+    Child(Rc<RefCell<UiUnit>>),
+    RelChild(UiRelSize, Rc<RefCell<UiUnit>>),
+}
+
+pub trait UiUnit {
+    fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPair<i32>);
+    // This function will be used to implement redraw
+    // This also affects that the same instance of an object cant be used in two different UiApps
+    fn get_parent(&self) -> Option<Rc<RefCell<UiUnit>>>;
+    fn set_parent(&mut self, parent: Rc<RefCell<UiUnit>>);
+    fn set_attribute(&mut self, attr: UiAttr);
+    fn set_attributes(&mut self, attr_vec: Vec<UiAttr>) {
+        for attr in attr_vec {
+            self.set_attribute(attr);
         }
     }
+    fn set_value(&mut self, value: UiSetParam);
+    fn set_values(&mut self, values: Vec<UiSetParam>) {
+        for value in values {
+            self.set_value(value);
+        }
+    }
+    fn get_size(&self) -> UiPair<u32>;
+    fn set_size(&mut self, size: UiPair<u32>);
+    // TODO : Add redraw function
+    // TODO : Add draw_partly function (which will be used by UiScrollCombo)
 }
