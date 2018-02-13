@@ -1,8 +1,7 @@
 use UiCell;
 
-use {UiPair, UiElem};
+use {UiPair, UiElem, UiFixSize};
 use items::UiEmptyItem;
-use new_ui_cell;
 
 use sdl2::{EventPump, Sdl, VideoSubsystem};
 use sdl2::event::{Event, WindowEvent};
@@ -103,6 +102,6 @@ impl UiApp {
         let getx = self.size.x;
         let gety = self.size.y;
         let mut elem = self.main_element.write().unwrap();
-        elem.set_size(UiPair { x: getx, y: gety });
+        elem.set_fix_size(UiFixSize { x: getx, y: gety });
     }
 }

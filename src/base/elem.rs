@@ -1,7 +1,7 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
-use {UiPair, UiAttr, UiParam};
+use {UiAttr, UiFixSize, UiPair, UiParam, UiSize};
 
 pub trait UiElem {
     fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPair<i32>);
@@ -17,6 +17,8 @@ pub trait UiElem {
             self.set_value(value);
         }
     }
-    fn get_size(&self) -> UiPair<u32>;
-    fn set_size(&mut self, size: UiPair<u32>);
+    fn set_size(&mut self, size: UiSize);
+    fn get_size(&self) -> UiSize;
+    fn set_fix_size(&mut self, size: UiFixSize);
+    fn get_fix_size(&self) -> UiFixSize;
 }

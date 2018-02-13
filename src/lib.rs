@@ -8,10 +8,11 @@ pub use baset::UiDirection;
 pub use baset::UiRelSize;
 
 mod base;
-pub use base::ui_cell::UiCell;
-pub use base::ui_cell::new_ui_cell;
-pub use base::ui_col::UiCol;
-pub use base::ui_elem::UiElem;
+pub use base::cell::UiCell;
+pub use base::cell::new_ui_cell;
+pub use base::col::UiCol;
+pub use base::elem::UiElem;
+pub use base::size_units::{UiSize, UiPos, UiFixSize, UiSizeVal};
 
 mod app;
 pub use app::UiApp;

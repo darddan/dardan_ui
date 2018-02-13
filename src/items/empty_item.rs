@@ -1,16 +1,18 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
-use {UiAttr, UiPair, UiParam, UiElem};
+use {UiAttr, UiElem, UiFixSize, UiPair, UiParam, UiSize};
 
 pub struct UiEmptyItem {
-    size: UiPair<u32>,
+    size: UiSize,
+    fix_size: UiFixSize,
 }
 
 impl UiEmptyItem {
     pub fn new() -> Self {
         UiEmptyItem {
-            size: UiPair::new_u32(),
+            size: UiSize::new(),
+            fix_size: UiFixSize::new(),
         }
     }
 }
@@ -34,11 +36,19 @@ impl UiElem for UiEmptyItem {
         }
     }
 
-    fn get_size(&self) -> UiPair<u32> {
+    fn get_size(&self) -> UiSize {
         self.size.clone()
     }
 
-    fn set_size(&mut self, size: UiPair<u32>) {
+    fn set_size(&mut self, size: UiSize) {
         self.size = size;
+    }
+
+    fn get_fix_size(&self) -> UiFixSize {
+        self.fix_size.clone()
+    }
+
+    fn set_fix_size(&mut self, size: UiFixSize) {
+        self.fix_size = size;
     }
 }

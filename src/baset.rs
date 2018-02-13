@@ -1,4 +1,4 @@
-use {UiCol, UiElem, UiCell, new_ui_cell};
+use {UiCol, UiElem, UiCell, UiSize};
 
 
 pub struct UiPair<T> {
@@ -29,7 +29,7 @@ impl UiPair<u32> {
 pub enum UiAttr {
     BackgroundColor(UiCol),
     TextColor(UiCol),
-    Size(UiPair<u32>),
+    Size(UiSize),
     Title(String),
     Direction(UiDirection),
 }
