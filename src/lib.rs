@@ -11,7 +11,7 @@ pub use base::cell::UiCell;
 pub use base::cell::new_ui_cell;
 pub use base::col::UiCol;
 pub use base::elem::UiElem;
-pub use base::size_units::{UiSize, UiPos, UiFixSize, UiSizeVal};
+pub use base::size_units::{UiFixSize, UiPos, UiSize, UiSizeVal};
 
 mod app;
 pub use app::UiApp;

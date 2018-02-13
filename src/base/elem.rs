@@ -1,7 +1,7 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
-use {UiAttr, UiFixSize, UiPos, UiParam, UiSize};
+use {UiAttr, UiFixSize, UiParam, UiPos, UiSize};
 
 pub trait UiElem {
     fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPos);

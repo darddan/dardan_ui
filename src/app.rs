@@ -1,6 +1,6 @@
 use UiCell;
 
-use {UiPos, UiElem, UiFixSize};
+use {UiElem, UiFixSize, UiPos};
 use items::UiEmptyItem;
 
 use sdl2::{EventPump, Sdl, VideoSubsystem};
@@ -99,9 +99,9 @@ impl UiApp {
     }
 
     pub fn set_size(&mut self) {
-        let getx = self.size.x;
-        let gety = self.size.y;
-        let mut elem = self.main_element.write().unwrap();
-        elem.set_fix_size(UiFixSize { x: getx, y: gety });
+        self.main_element.write().unwrap().set_fix_size(UiFixSize {
+            x: self.size.x,
+            y: self.size.y,
+        });
     }
 }

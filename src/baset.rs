@@ -1,4 +1,4 @@
-use {UiCol, UiElem, UiCell, UiSize};
+use {UiCell, UiCol, UiElem, UiSize};
 
 pub enum UiAttr {
     BackgroundColor(UiCol),
@@ -26,4 +26,3 @@ pub enum UiParam {
     Child(UiCell<UiElem>),
     RelChild(UiRelSize, UiCell<UiElem>),
 }
-

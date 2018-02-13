@@ -1,7 +1,7 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
-use {UiAttr, UiElem, UiFixSize, UiPos, UiParam, UiSize};
+use {UiAttr, UiElem, UiFixSize, UiParam, UiPos, UiSize};
 
 pub struct UiEmptyItem {
     size: UiSize,

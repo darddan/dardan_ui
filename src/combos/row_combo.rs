@@ -1,4 +1,4 @@
-use {UiAttr, UiCell, UiCol, UiDirection, UiElem, UiPos, UiParam, UiRelSize, UiSize, UiFixSize};
+use {UiAttr, UiCell, UiCol, UiDirection, UiElem, UiFixSize, UiParam, UiPos, UiRelSize, UiSize};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -113,17 +113,13 @@ impl UiElem for UiRowCombo {
         }
     }
 
-    fn set_size(&mut self, size: UiSize) {
-
-    }
+    fn set_size(&mut self, size: UiSize) {}
 
     fn get_size(&self) -> UiSize {
         self.size.clone()
     }
 
-    fn set_fix_size(&mut self, size: UiFixSize) {
-
-    }
+    fn set_fix_size(&mut self, size: UiFixSize) {}
 
     fn get_fix_size(&self) -> UiFixSize {
         self.fix_size.clone()
