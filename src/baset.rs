@@ -1,31 +1,5 @@
 use {UiCol, UiElem, UiCell, UiSize};
 
-
-pub struct UiPair<T> {
-    pub x: T,
-    pub y: T,
-}
-
-impl Clone for UiPair<u32> {
-    fn clone(&self) -> Self {
-        UiPair {
-            x: self.x,
-            y: self.y,
-        }
-    }
-}
-
-impl UiPair<i32> {
-    pub fn new_i32() -> Self {
-        UiPair { x: 0, y: 0 }
-    }
-}
-impl UiPair<u32> {
-    pub fn new_u32() -> Self {
-        UiPair { x: 0, y: 0 }
-    }
-}
-
 pub enum UiAttr {
     BackgroundColor(UiCol),
     TextColor(UiCol),

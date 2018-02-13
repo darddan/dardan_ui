@@ -1,6 +1,6 @@
 use UiCell;
 
-use {UiPair, UiElem, UiFixSize};
+use {UiPos, UiElem, UiFixSize};
 use items::UiEmptyItem;
 
 use sdl2::{EventPump, Sdl, VideoSubsystem};
@@ -12,7 +12,7 @@ use sdl2::video::Window;
 
 pub struct UiApp {
     name: String,
-    size: UiPair<u32>,
+    size: UiFixSize,
     main_element: UiCell<UiElem>,
     context: Sdl,
     subsystem: VideoSubsystem,
@@ -26,7 +26,7 @@ impl UiApp {
             context: sdl_context,
             subsystem: video_subsystem,
             name: String::from("Ui Application"),
-            size: UiPair { x: 400, y: 400 },
+            size: UiFixSize { x: 400, y: 400 },
             main_element: ::new_ui_cell(UiEmptyItem::new()),
         }
     }
@@ -57,7 +57,7 @@ impl UiApp {
 
     #[inline(always)]
     fn handle_loop(&mut self, event_pump: &mut EventPump, mut canvas: &mut Canvas<Window>) {
-        let position = UiPair::new_i32();
+        let position = UiPos::new();
 
         self.set_size();
         self.draw(&mut canvas, &position);
@@ -74,7 +74,7 @@ impl UiApp {
                         win_event: WindowEvent::Resized(x_val, y_val),
                         ..
                     } => {
-                        self.size = UiPair {
+                        self.size = UiFixSize {
                             x: x_val as u32,
                             y: y_val as u32,
                         };
@@ -91,7 +91,7 @@ impl UiApp {
         }
     }
 
-    fn draw(&mut self, canvas: &mut Canvas<Window>, position: &UiPair<i32>) {
+    fn draw(&mut self, canvas: &mut Canvas<Window>, position: &UiPos) {
         canvas.set_draw_color(Color::RGBA(0, 0, 0, 0));
         canvas.clear();
         let elem = self.main_element.write().unwrap();

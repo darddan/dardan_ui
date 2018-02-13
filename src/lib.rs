@@ -1,7 +1,6 @@
 extern crate sdl2;
 
 mod baset;
-pub use baset::UiPair;
 pub use baset::UiAttr;
 pub use baset::UiParam;
 pub use baset::UiDirection;

@@ -1,9 +1,6 @@
 extern crate dardan_ui;
 
-use std::rc::Rc;
-use std::cell::RefCell;
-
-use dardan_ui::{new_ui_cell, UiApp, UiCell, UiCol, UiPair, UiRelSize};
+use dardan_ui::{new_ui_cell, UiApp, UiCol, UiRelSize};
 use dardan_ui::combos::UiRowCombo;
 
 pub fn main() {

@@ -1,10 +1,10 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
-use {UiAttr, UiFixSize, UiPair, UiParam, UiSize};
+use {UiAttr, UiFixSize, UiPos, UiParam, UiSize};
 
 pub trait UiElem {
-    fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPair<i32>);
+    fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPos);
     fn set_attribute(&mut self, attr: UiAttr);
     fn set_attributes(&mut self, attr_vec: Vec<UiAttr>) {
         for attr in attr_vec {

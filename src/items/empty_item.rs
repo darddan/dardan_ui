@@ -1,7 +1,7 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
-use {UiAttr, UiElem, UiFixSize, UiPair, UiParam, UiSize};
+use {UiAttr, UiElem, UiFixSize, UiPos, UiParam, UiSize};
 
 pub struct UiEmptyItem {
     size: UiSize,
@@ -18,7 +18,7 @@ impl UiEmptyItem {
 }
 
 impl UiElem for UiEmptyItem {
-    fn draw(&self, _canvas: &mut Canvas<Window>, _cv_pos: &UiPair<i32>) {
+    fn draw(&self, _canvas: &mut Canvas<Window>, _cv_pos: &UiPos) {
         // Do Nothing
     }
 

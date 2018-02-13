@@ -1,4 +1,4 @@
-use {UiAttr, UiCell, UiCol, UiDirection, UiElem, UiPair, UiParam, UiRelSize, UiSize, UiFixSize};
+use {UiAttr, UiCell, UiCol, UiDirection, UiElem, UiPos, UiParam, UiRelSize, UiSize, UiFixSize};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -13,12 +13,12 @@ pub struct UiRowCombo {
     background_color: Color,
     size: UiSize,
     fix_size: UiFixSize,
-    canvas_pos: UiPair<i32>,
-    local_pos: UiPair<i32>,
+    canvas_pos: UiPos,
+    local_pos: UiPos,
 }
 
 impl UiElem for UiRowCombo {
-    fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPair<i32>) {
+    fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPos) {
         canvas.set_draw_color(self.background_color);
         let rect = Rect::new(cv_pos.x, cv_pos.y, self.fix_size.x, self.fix_size.y);
         let _ = canvas.fill_rect(rect);
@@ -56,7 +56,7 @@ impl UiElem for UiRowCombo {
 
                 elem.draw(
                     canvas,
-                    &UiPair {
+                    &UiPos {
                         x: diff,
                         y: cv_pos.y,
                     },
@@ -84,7 +84,7 @@ impl UiElem for UiRowCombo {
 
                 elem.draw(
                     canvas,
-                    &UiPair {
+                    &UiPos {
                         x: cv_pos.x,
                         y: diff,
                     },
@@ -147,8 +147,8 @@ impl UiRowCombo {
             background_color: Color::RGB(0, 0, 0),
             size: UiSize::new(),
             fix_size: UiFixSize::new(),
-            canvas_pos: UiPair::new_i32(),
-            local_pos: UiPair::new_i32(),
+            canvas_pos: UiPos::new(),
+            local_pos: UiPos::new(),
         }
     }
 
