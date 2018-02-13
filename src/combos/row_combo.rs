@@ -17,7 +17,6 @@ pub struct UiRowCombo {
     size: UiPair<u32>,
     canvas_pos: UiPair<i32>,
     local_pos: UiPair<i32>,
-    parent: Option<Rc<RefCell<UiElem>>>,
 }
 
 impl UiElem for UiRowCombo {
@@ -76,14 +75,6 @@ impl UiElem for UiRowCombo {
         }
     }
 
-    fn get_parent(&self) -> Option<Rc<RefCell<UiElem>>> {
-        self.parent.clone()
-    }
-
-    fn set_parent(&mut self, parent: Rc<RefCell<UiElem>>) {
-        self.parent = Some(parent);
-    }
-
     fn set_attribute(&mut self, attr: UiAttr) {
         match attr {
             UiAttr::BackgroundColor(color) => self.set_background_color(color),
@@ -124,7 +115,6 @@ impl UiRowCombo {
             size: UiPair::new_u32(),
             canvas_pos: UiPair::new_i32(),
             local_pos: UiPair::new_i32(),
-            parent: None,
         }
     }
 
