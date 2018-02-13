@@ -1,8 +1,8 @@
-use std::cell::RefCell;
-use std::rc::Rc;
+use UiCell;
 
 use {UiPair, UiElem};
 use items::UiEmptyItem;
+use new_ui_cell;
 
 use sdl2::{EventPump, Sdl, VideoSubsystem};
 use sdl2::event::{Event, WindowEvent};
@@ -14,7 +14,7 @@ use sdl2::video::Window;
 pub struct UiApp {
     name: String,
     size: UiPair<u32>,
-    main_element: Rc<RefCell<UiElem>>,
+    main_element: UiCell<UiElem>,
     context: Sdl,
     subsystem: VideoSubsystem,
 }
@@ -28,7 +28,7 @@ impl UiApp {
             subsystem: video_subsystem,
             name: String::from("Ui Application"),
             size: UiPair { x: 400, y: 400 },
-            main_element: Rc::new(RefCell::new(UiEmptyItem::new())),
+            main_element: ::new_ui_cell(UiEmptyItem::new()),
         }
     }
 
@@ -36,7 +36,7 @@ impl UiApp {
         self.name = name;
     }
 
-    pub fn set_main_element(&mut self, main_element: Rc<RefCell<UiElem>>) {
+    pub fn set_main_element(&mut self, main_element: UiCell<UiElem>) {
         self.main_element = main_element;
     }
 
@@ -95,14 +95,14 @@ impl UiApp {
     fn draw(&mut self, canvas: &mut Canvas<Window>, position: &UiPair<i32>) {
         canvas.set_draw_color(Color::RGBA(0, 0, 0, 0));
         canvas.clear();
-        let elem = self.main_element.borrow();
+        let elem = self.main_element.write().unwrap();
         elem.draw(canvas, position);
     }
 
     pub fn set_size(&mut self) {
         let getx = self.size.x;
         let gety = self.size.y;
-        let mut elem = self.main_element.borrow_mut();
+        let mut elem = self.main_element.write().unwrap();
         elem.set_size(UiPair { x: getx, y: gety });
     }
 }
