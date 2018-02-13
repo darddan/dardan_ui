@@ -1,7 +1,7 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 
-use {UiAttr, UiColor, UiDirection, UiPair, UiRelSize, UiSetParam, UiUnit};
+use {UiAttr, UiCol, UiDirection, UiPair, UiRelSize, UiParam, UiElem};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -9,7 +9,7 @@ use sdl2::rect::Rect;
 use sdl2::pixels::Color;
 
 pub struct UiRowCombo {
-    elements: Vec<Rc<RefCell<UiUnit>>>,
+    elements: Vec<Rc<RefCell<UiElem>>>,
     elements_rel_size: Vec<UiRelSize>,
     elements_fix_size: Vec<u32>,
     direction: UiDirection,
@@ -17,10 +17,10 @@ pub struct UiRowCombo {
     size: UiPair<u32>,
     canvas_pos: UiPair<i32>,
     local_pos: UiPair<i32>,
-    parent: Option<Rc<RefCell<UiUnit>>>,
+    parent: Option<Rc<RefCell<UiElem>>>,
 }
 
-impl UiUnit for UiRowCombo {
+impl UiElem for UiRowCombo {
     fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPair<i32>) {
         canvas.set_draw_color(self.background_color);
         let rect = Rect::new(cv_pos.x, cv_pos.y, self.size.x, self.size.y);
@@ -76,11 +76,11 @@ impl UiUnit for UiRowCombo {
         }
     }
 
-    fn get_parent(&self) -> Option<Rc<RefCell<UiUnit>>> {
+    fn get_parent(&self) -> Option<Rc<RefCell<UiElem>>> {
         self.parent.clone()
     }
 
-    fn set_parent(&mut self, parent: Rc<RefCell<UiUnit>>) {
+    fn set_parent(&mut self, parent: Rc<RefCell<UiElem>>) {
         self.parent = Some(parent);
     }
 
@@ -93,10 +93,10 @@ impl UiUnit for UiRowCombo {
         }
     }
 
-    fn set_value(&mut self, value: UiSetParam) {
+    fn set_value(&mut self, value: UiParam) {
         match value {
-            UiSetParam::Attr(attr) => self.set_attribute(attr),
-            UiSetParam::RelChild(rel_size, child) => self.add_child(rel_size, child),
+            UiParam::Attr(attr) => self.set_attribute(attr),
+            UiParam::RelChild(rel_size, child) => self.add_child(rel_size, child),
             _ => (),
         }
     }
@@ -128,7 +128,7 @@ impl UiRowCombo {
         }
     }
 
-    pub fn set_background_color(&mut self, color: UiColor) {
+    pub fn set_background_color(&mut self, color: UiCol) {
         self.background_color = color.sdl2();
     }
 
@@ -136,7 +136,7 @@ impl UiRowCombo {
         self.direction = dir;
     }
 
-    pub fn add_child(&mut self, rel_size: UiRelSize, child: Rc<RefCell<UiUnit>>) {
+    pub fn add_child(&mut self, rel_size: UiRelSize, child: Rc<RefCell<UiElem>>) {
         self.elements.push(child);
         if let UiRelSize::Px(fix_size) = rel_size {
             self.elements_fix_size.push(fix_size);

@@ -4,33 +4,33 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::pixels::Color;
 
-pub struct UiColor {
+pub struct UiCol {
     pub r: u8,
     pub g: u8,
     pub b: u8,
     pub a: u8,
 }
 
-impl UiColor {
+impl UiCol {
     pub fn sdl2(&self) -> Color {
         Color::RGBA(self.r, self.g, self.b, self.a)
     }
     pub fn new(r: u8, g: u8, b: u8, a: u8) -> Self {
-        UiColor { r, g, b, a }
+        UiCol { r, g, b, a }
     }
     // Color names taken from:
     // https://graf1x.com/wp-content/uploads/2017/06/list-of-colors-and-color-names.jpg
     pub fn red() -> Self {
-        UiColor::new(0xD3, 0x00, 0x00, 0xFF)
+        UiCol::new(0xD3, 0x00, 0x00, 0xFF)
     }
     pub fn green() -> Self {
-        UiColor::new(0x3B, 0xB1, 0x43, 0xFF)
+        UiCol::new(0x3B, 0xB1, 0x43, 0xFF)
     }
     pub fn blue() -> Self {
-        UiColor::new(0x00, 0x18, 0xF9, 0xFF)
+        UiCol::new(0x00, 0x18, 0xF9, 0xFF)
     }
     pub fn salmon() -> Self {
-        UiColor::new(0xFA, 0x80, 0x72, 0xFF)
+        UiCol::new(0xFA, 0x80, 0x72, 0xFF)
     }
 }
 
@@ -60,8 +60,8 @@ impl UiPair<u32> {
 }
 
 pub enum UiAttr {
-    BackgroundColor(UiColor),
-    TextColor(UiColor),
+    BackgroundColor(UiCol),
+    TextColor(UiCol),
     Size(UiPair<u32>),
     Title(String),
     Direction(UiDirection),
@@ -80,26 +80,26 @@ pub enum UiDirection {
     Vertical,
 }
 
-pub enum UiSetParam {
+pub enum UiParam {
     Attr(UiAttr),
-    Child(Rc<RefCell<UiUnit>>),
-    RelChild(UiRelSize, Rc<RefCell<UiUnit>>),
+    Child(Rc<RefCell<UiElem>>),
+    RelChild(UiRelSize, Rc<RefCell<UiElem>>),
 }
 
-pub trait UiUnit {
+pub trait UiElem {
     fn draw(&self, canvas: &mut Canvas<Window>, cv_pos: &UiPair<i32>);
     // This function will be used to implement redraw
     // This also affects that the same instance of an object cant be used in two different UiApps
-    fn get_parent(&self) -> Option<Rc<RefCell<UiUnit>>>;
-    fn set_parent(&mut self, parent: Rc<RefCell<UiUnit>>);
+    fn get_parent(&self) -> Option<Rc<RefCell<UiElem>>>;
+    fn set_parent(&mut self, parent: Rc<RefCell<UiElem>>);
     fn set_attribute(&mut self, attr: UiAttr);
     fn set_attributes(&mut self, attr_vec: Vec<UiAttr>) {
         for attr in attr_vec {
             self.set_attribute(attr);
         }
     }
-    fn set_value(&mut self, value: UiSetParam);
-    fn set_values(&mut self, values: Vec<UiSetParam>) {
+    fn set_value(&mut self, value: UiParam);
+    fn set_values(&mut self, values: Vec<UiParam>) {
         for value in values {
             self.set_value(value);
         }

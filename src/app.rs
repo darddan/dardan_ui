@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use {UiPair, UiUnit};
+use {UiPair, UiElem};
 use items::UiEmptyItem;
 
 use sdl2::{EventPump, Sdl, VideoSubsystem};
@@ -14,7 +14,7 @@ use sdl2::video::Window;
 pub struct UiApp {
     name: String,
     size: UiPair<u32>,
-    main_element: Rc<RefCell<UiUnit>>,
+    main_element: Rc<RefCell<UiElem>>,
     context: Sdl,
     subsystem: VideoSubsystem,
 }
@@ -36,7 +36,7 @@ impl UiApp {
         self.name = name;
     }
 
-    pub fn set_main_element(&mut self, main_element: Rc<RefCell<UiUnit>>) {
+    pub fn set_main_element(&mut self, main_element: Rc<RefCell<UiElem>>) {
         self.main_element = main_element;
     }
 

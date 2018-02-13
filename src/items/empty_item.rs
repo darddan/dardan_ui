@@ -4,11 +4,11 @@ use std::cell::RefCell;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
-use {UiAttr, UiPair, UiSetParam, UiUnit};
+use {UiAttr, UiPair, UiParam, UiElem};
 
 pub struct UiEmptyItem {
     size: UiPair<u32>,
-    parent: Option<Rc<RefCell<UiUnit>>>,
+    parent: Option<Rc<RefCell<UiElem>>>,
 }
 
 impl UiEmptyItem {
@@ -20,16 +20,16 @@ impl UiEmptyItem {
     }
 }
 
-impl UiUnit for UiEmptyItem {
+impl UiElem for UiEmptyItem {
     fn draw(&self, _canvas: &mut Canvas<Window>, _cv_pos: &UiPair<i32>) {
         // Do Nothing
     }
 
-    fn get_parent(&self) -> Option<Rc<RefCell<UiUnit>>> {
+    fn get_parent(&self) -> Option<Rc<RefCell<UiElem>>> {
         self.parent.clone()
     }
 
-    fn set_parent(&mut self, parent: Rc<RefCell<UiUnit>>) {
+    fn set_parent(&mut self, parent: Rc<RefCell<UiElem>>) {
         self.parent = Some(parent);
     }
 
@@ -40,9 +40,9 @@ impl UiUnit for UiEmptyItem {
         }
     }
 
-    fn set_value(&mut self, value: UiSetParam) {
+    fn set_value(&mut self, value: UiParam) {
         match value {
-            UiSetParam::Attr(attr) => self.set_attribute(attr),
+            UiParam::Attr(attr) => self.set_attribute(attr),
             _ => (),
         }
     }

@@ -1,11 +1,11 @@
 extern crate sdl2;
 
 mod base;
-pub use base::UiUnit;
+pub use base::UiElem;
 pub use base::UiPair;
-pub use base::UiColor;
+pub use base::UiCol;
 pub use base::UiAttr;
-pub use base::UiSetParam;
+pub use base::UiParam;
 pub use base::UiDirection;
 pub use base::UiRelSize;
 
