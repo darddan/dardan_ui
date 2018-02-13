@@ -1,7 +1,4 @@
-use std::rc::Rc;
-use std::cell::RefCell;
-
-use {UiAttr, UiCol, UiDirection, UiPair, UiRelSize, UiParam, UiElem};
+use {UiAttr, UiCol, UiDirection, UiPair, UiRelSize, UiParam, UiElem, UiCell, new_ui_cell};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -9,7 +6,7 @@ use sdl2::rect::Rect;
 use sdl2::pixels::Color;
 
 pub struct UiRowCombo {
-    elements: Vec<Rc<RefCell<UiElem>>>,
+    elements: Vec<UiCell<UiElem>>,
     elements_rel_size: Vec<UiRelSize>,
     elements_fix_size: Vec<u32>,
     direction: UiDirection,
@@ -30,7 +27,7 @@ impl UiElem for UiRowCombo {
         if self.direction == UiDirection::Horizontal {
             let mut sum = 0; 
             for (i, item) in self.elements.iter().enumerate() {
-                let elem = item.borrow();
+                let elem = item.read().unwrap();
                 let elem_size = elem.get_size();
                 let elem_space = self.elements_fix_size[i];
 
@@ -52,7 +49,7 @@ impl UiElem for UiRowCombo {
         } else {
             let mut sum = 0; 
             for (i, item) in self.elements.iter().enumerate() {
-                let elem = item.borrow();
+                let elem = item.read().unwrap();
                 let elem_size = elem.get_size();
                 let elem_space = self.elements_fix_size[i];
 
@@ -126,7 +123,7 @@ impl UiRowCombo {
         self.direction = dir;
     }
 
-    pub fn add_child(&mut self, rel_size: UiRelSize, child: Rc<RefCell<UiElem>>) {
+    pub fn add_child(&mut self, rel_size: UiRelSize, child: UiCell<UiElem>) {
         self.elements.push(child);
         if let UiRelSize::Px(fix_size) = rel_size {
             self.elements_fix_size.push(fix_size);
@@ -154,7 +151,7 @@ impl UiRowCombo {
                     count_max_elements += 1;
                 },
                 &UiRelSize::Inherit => {
-                    let mut elem = self.elements[i].borrow_mut();
+                    let mut elem = self.elements[i].write().unwrap();
                     elem.set_size(self.size.clone());
 
                     let elem_size = if self.direction == UiDirection::Horizontal { elem.get_size().x } else { elem.get_size().y };
@@ -205,7 +202,7 @@ impl UiRowCombo {
                     x: self.elements_fix_size[it],
                     y: self.size.y,
                 };
-                elem.borrow_mut().set_size(new_size);
+                elem.write().unwrap().set_size(new_size);
                 it += 1;
             }
         } else {
@@ -215,7 +212,7 @@ impl UiRowCombo {
                     x: self.size.x,
                     y: self.elements_fix_size[it],
                 };
-                elem.borrow_mut().set_size(new_size);
+                elem.write().unwrap().set_size(new_size);
                 it += 1;
             }
         }

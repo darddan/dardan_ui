@@ -1,7 +1,4 @@
-use std::rc::Rc;
-use std::cell::RefCell;
-
-use {UiCol, UiElem};
+use {UiCol, UiElem, UiCell, new_ui_cell};
 
 
 pub struct UiPair<T> {
@@ -52,7 +49,7 @@ pub enum UiDirection {
 
 pub enum UiParam {
     Attr(UiAttr),
-    Child(Rc<RefCell<UiElem>>),
-    RelChild(UiRelSize, Rc<RefCell<UiElem>>),
+    Child(UiCell<UiElem>),
+    RelChild(UiRelSize, UiCell<UiElem>),
 }
 

@@ -13,11 +13,11 @@ pub fn main() {
     
     let mut fst_child = UiRowCombo::new();
     fst_child.set_background_color(UiCol::salmon());
-    main_container.add_child(UiRelSize::Px(200), Rc::new(RefCell::new(fst_child)));
+    main_container.add_child(UiRelSize::Px(200), new_ui_cell(fst_child));
     
     let mut snd_child = UiRowCombo::new();
     snd_child.set_background_color(UiCol::red());
-    main_container.add_child(UiRelSize::Max, Rc::new(RefCell::new(snd_child)));
+    main_container.add_child(UiRelSize::Max, new_ui_cell(snd_child));
     
     app.set_main_element(new_ui_cell(main_container));
 
