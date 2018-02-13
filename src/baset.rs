@@ -1,13 +1,3 @@
-use {UiCell, UiCol, UiElem, UiSize};
-
-pub enum UiAttr {
-    BackgroundColor(UiCol),
-    TextColor(UiCol),
-    Size(UiSize),
-    Title(String),
-    Direction(UiDirection),
-}
-
 pub enum UiRelSize {
     Inherit,
     Max,
@@ -19,10 +9,4 @@ pub enum UiRelSize {
 pub enum UiDirection {
     Horizontal,
     Vertical,
-}
-
-pub enum UiParam {
-    Attr(UiAttr),
-    Child(UiCell<UiElem>),
-    RelChild(UiRelSize, UiCell<UiElem>),
 }
