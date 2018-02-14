@@ -71,7 +71,7 @@ impl Horizontal {
             return;
         }
 
-        let rel_multiplier : f32 = size_left_for_relatives as f32 / sum_of_elements_rel as f32;
+        let rel_multiplier: f32 = size_left_for_relatives as f32 / sum_of_elements_rel as f32;
 
         for elem_iter in elem_queue {
             let mut elem = elem_iter.write().unwrap();
@@ -107,10 +107,13 @@ impl UiElem for Horizontal {
                 break;
             }
 
-            elem.draw(canvas, &UiPos{
-                x: cv_pos.x + count_elements_size as i32,
-                y: cv_pos.y,
-            });
+            elem.draw(
+                canvas,
+                &UiPos {
+                    x: cv_pos.x + count_elements_size as i32,
+                    y: cv_pos.y,
+                },
+            );
 
             count_elements_size += elem_size;
         }
@@ -129,7 +132,6 @@ impl UiElem for Horizontal {
         match param {
             UiParam::Attr(val) => self.set_attribute(val),
             UiParam::Child(val) => self.add_child(val),
-            _ => (),
         }
     }
 

@@ -1,6 +1,6 @@
 [package]
 name = "dardan_ui"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Dardan <mail@dardan.im>"]
 description = "A simple GUI Toolkit based on SDL2. The goal is for it to be easy to use and be similar to GUI Toolkits for OO languages."
 license = "MIT"

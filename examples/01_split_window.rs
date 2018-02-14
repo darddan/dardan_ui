@@ -1,6 +1,6 @@
 extern crate dardan_ui;
 
-use dardan_ui::{new_ui_cell, UiApp, UiCol, UiSize, UiSizeVal, UiElem};
+use dardan_ui::{new_ui_cell, UiApp, UiCol, UiElem, UiSize, UiSizeVal};
 use dardan_ui::elements::{Horizontal, UiFill};
 
 pub fn main() {

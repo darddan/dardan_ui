@@ -1,4 +1,4 @@
-use {UiCol, UiDirection, UiFixSize, UiSize};
+use {UiCol, UiFixSize, UiSize};
 
 pub enum UiAttr {
     BackgroundColor(UiCol),
@@ -6,5 +6,4 @@ pub enum UiAttr {
     Size(UiSize),
     FixSize(UiFixSize),
     Title(String),
-    Direction(UiDirection),
 }
