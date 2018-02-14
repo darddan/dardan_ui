@@ -1,3 +1,6 @@
+#[macro_use]
+mod util;
+
 mod space;
 pub use self::space::UiSpace;
 
@@ -9,3 +12,4 @@ pub use self::horizontal::UiHorizontal;
 
 mod vertical;
 pub use self::vertical::UiVertical;
+

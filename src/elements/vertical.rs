@@ -135,24 +135,13 @@ impl UiElem for UiVertical {
         }
     }
 
-    fn set_size(&mut self, size: UiSize) {
-        self.size = size;
-    }
-
-    fn get_size(&self) -> UiSize {
-        self.size.clone()
-    }
-
-    fn set_fix_size(&mut self, size: UiFixSize) {
-        self.fix_size = size;
-        if self.elements.len() == 0 {
-            self.fix_size.y = 0;
+    define_size_functions!(Size: size);
+    
+    define_size_functions!(FixSize: fix_size myself {
+        if myself.elements.len() == 0 {
+            myself.fix_size.x = 0;
         } else {
-            self.calculate_children_size();
+            myself.calculate_children_size();
         }
-    }
-
-    fn get_fix_size(&self) -> UiFixSize {
-        self.fix_size.clone()
-    }
+    });
 }

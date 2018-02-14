@@ -77,14 +77,22 @@ impl UiHorizontal {
             let mut elem = elem_iter.write().unwrap();
             let elem_size = elem.get_size().x;
             match elem_size {
-                UiSizeVal::Max => elem.set_fix_size(UiFixSize {
-                    x: rel_multiplier as u32,
-                    y: self.fix_size.y,
-                }),
-                UiSizeVal::Rel(val) => elem.set_fix_size(UiFixSize {
-                    x: (val as f32 * rel_multiplier) as u32,
-                    y: self.fix_size.y,
-                }),
+                UiSizeVal::Max => {
+                    let new_x = rel_multiplier as u32;
+                    elem.set_fix_size(UiFixSize {
+                        x: new_x,
+                        y: self.fix_size.y,
+                    });
+                    sum_of_elements_px += new_x;
+                },
+                UiSizeVal::Rel(val) =>{
+                    let new_x = (val as f32 * rel_multiplier) as u32;
+                    elem.set_fix_size(UiFixSize {
+                        x: new_x,
+                        y: self.fix_size.y,
+                    });
+                    sum_of_elements_px += new_x;
+                },
                 _ => (),
             }
         }
@@ -135,24 +143,12 @@ impl UiElem for UiHorizontal {
         }
     }
 
-    fn set_size(&mut self, size: UiSize) {
-        self.size = size;
-    }
-
-    fn get_size(&self) -> UiSize {
-        self.size.clone()
-    }
-
-    fn set_fix_size(&mut self, size: UiFixSize) {
-        self.fix_size = size;
-        if self.elements.len() == 0 {
-            self.fix_size.x = 0;
+    define_size_functions!(Size: size);
+    define_size_functions!(FixSize: fix_size myself {
+        if myself.elements.len() == 0 {
+            myself.fix_size.x = 0;
         } else {
-            self.calculate_children_size();
+            myself.calculate_children_size();
         }
-    }
-
-    fn get_fix_size(&self) -> UiFixSize {
-        self.fix_size.clone()
-    }
+    });
 }

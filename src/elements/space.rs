@@ -1,4 +1,4 @@
-use {UiAttr, UiElem, UiFixSize, UiParam, UiPos, UiSize};
+use {UiAttr, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
 
 pub struct UiSpace {
     size: UiSize,
@@ -34,19 +34,7 @@ impl UiElem for UiSpace {
         }
     }
 
-    fn get_size(&self) -> UiSize {
-        self.size.clone()
-    }
-
-    fn set_size(&mut self, size: UiSize) {
-        self.size = size;
-    }
-
-    fn get_fix_size(&self) -> UiFixSize {
-        self.fix_size.clone()
-    }
-
-    fn set_fix_size(&mut self, size: UiFixSize) {
-        self.fix_size = size;
-    }
+    define_size_functions!(Size: size);
+    
+    define_size_functions!(FixSize: fix_size);
 }
