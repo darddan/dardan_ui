@@ -96,6 +96,7 @@ impl UiHorizontal {
                 _ => (),
             }
         }
+        self.fix_size.x = sum_of_elements_px;
     }
 
     pub fn set_background_color(&mut self, color: UiCol) {

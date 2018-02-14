@@ -77,17 +77,26 @@ impl UiVertical {
             let mut elem = elem_iter.write().unwrap();
             let elem_size = elem.get_size().y;
             match elem_size {
-                UiSizeVal::Max => elem.set_fix_size(UiFixSize {
-                    x: self.fix_size.x,
-                    y: rel_multiplier as u32,
-                }),
-                UiSizeVal::Rel(val) => elem.set_fix_size(UiFixSize {
-                    x: self.fix_size.x,
-                    y: (val as f32 * rel_multiplier) as u32,
-                }),
+                UiSizeVal::Max => {
+                    let new_y = rel_multiplier as u32;
+                    elem.set_fix_size(UiFixSize {
+                        x: self.fix_size.x,
+                        y: new_y,
+                    });
+                    sum_of_elements_px += new_y;
+                },
+                UiSizeVal::Rel(val) => {
+                    let new_y = (val as f32 * rel_multiplier) as u32;
+                    elem.set_fix_size(UiFixSize {
+                        x: self.fix_size.x,
+                        y: new_y,
+                    });
+                    sum_of_elements_px += new_y;
+                },
                 _ => (),
             }
         }
+        self.fix_size.y = sum_of_elements_px;
     }
 
     pub fn set_background_color(&mut self, color: UiCol) {
@@ -136,7 +145,7 @@ impl UiElem for UiVertical {
     }
 
     define_size_functions!(Size: size);
-    
+
     define_size_functions!(FixSize: fix_size myself {
         if myself.elements.len() == 0 {
             myself.fix_size.x = 0;
