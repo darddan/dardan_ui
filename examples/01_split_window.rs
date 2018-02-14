@@ -1,12 +1,12 @@
 extern crate dardan_ui;
 
 use dardan_ui::{new_ui_cell, UiApp, UiCol, UiElem, UiSize, UiSizeVal};
-use dardan_ui::elements::{Horizontal, UiFill};
+use dardan_ui::elements::{UiFill, UiHorizontal};
 
 pub fn main() {
     let mut app = UiApp::new();
 
-    let mut main_container = Horizontal::new();
+    let mut main_container = UiHorizontal::new();
     main_container.set_background_color(UiCol::blue());
 
     let mut fst_child = UiFill::new();

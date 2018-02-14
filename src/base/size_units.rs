@@ -3,7 +3,7 @@ pub enum UiSizeVal {
     Max,
     Min,
     Px(u32),
-    Percent(u8),
+    Rel(u8),
 }
 
 #[derive(Clone)]

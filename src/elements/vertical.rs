@@ -1,15 +1,15 @@
 use {UiAttr, UiCell, UiCol, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
 
-pub struct UiHorizontal {
+pub struct UiVertical {
     elements: Vec<UiCell<UiElem>>,
     background_color: ::sdl2::pixels::Color,
     size: UiSize,
     fix_size: UiFixSize,
 }
 
-impl UiHorizontal {
+impl UiVertical {
     pub fn new() -> Self {
-        UiHorizontal {
+        UiVertical {
             elements: vec![],
             background_color: ::sdl2::pixels::Color::RGBA(0, 0, 0, 0),
             size: UiSize::new(),
@@ -22,7 +22,7 @@ impl UiHorizontal {
         self.calculate_children_size();
     }
 
-    fn calculate_children_size(&mut self) {
+    fn calculate_children_size(&mut self) {        
         let mut num_of_elements_rel: u32 = 0;
 
         let mut sum_of_elements_px: u32 = 0;
@@ -32,7 +32,7 @@ impl UiHorizontal {
 
         for elem in &self.elements {
             let mut borrowed_element = elem.write().unwrap();
-            let elem_size = borrowed_element.get_size().x;
+            let elem_size = borrowed_element.get_size().y;
 
             match elem_size {
                 UiSizeVal::Max => {
@@ -48,22 +48,22 @@ impl UiHorizontal {
                 }
                 UiSizeVal::Px(val) => {
                     borrowed_element.set_fix_size(UiFixSize {
-                        x: val,
-                        y: self.fix_size.y,
+                        x: self.fix_size.x,
+                        y: val,
                     });
                     sum_of_elements_px += val;
                 }
             }
         }
 
-        let size_left_for_relatives = if self.fix_size.x <= sum_of_elements_px {
+        let size_left_for_relatives = if self.fix_size.y <= sum_of_elements_px {
             0
         } else {
-            self.fix_size.x - sum_of_elements_px
+            self.fix_size.y - sum_of_elements_px
         };
 
         if num_of_elements_rel == 0 {
-            self.fix_size.x = sum_of_elements_px;
+            self.fix_size.y = sum_of_elements_px;
             return;
         }
 
@@ -75,15 +75,15 @@ impl UiHorizontal {
 
         for elem_iter in elem_queue {
             let mut elem = elem_iter.write().unwrap();
-            let elem_size = elem.get_size().x;
+            let elem_size = elem.get_size().y;
             match elem_size {
                 UiSizeVal::Max => elem.set_fix_size(UiFixSize {
-                    x: rel_multiplier as u32,
-                    y: self.fix_size.y,
+                    x: self.fix_size.x,
+                    y: rel_multiplier as u32,
                 }),
                 UiSizeVal::Rel(val) => elem.set_fix_size(UiFixSize {
-                    x: (val as f32 * rel_multiplier) as u32,
-                    y: self.fix_size.y,
+                    x: self.fix_size.x,
+                    y: (val as f32 * rel_multiplier) as u32,
                 }),
                 _ => (),
             }
@@ -95,23 +95,23 @@ impl UiHorizontal {
     }
 }
 
-impl UiElem for UiHorizontal {
+impl UiElem for UiVertical {
     fn draw(&self, canvas: &mut ::sdl2::render::Canvas<::sdl2::video::Window>, cv_pos: &UiPos) {
         ::util::draw_rect(canvas, cv_pos, &self.fix_size, self.background_color);
 
         let mut count_elements_size = 0;
         for elem_iter in &self.elements {
             let elem = elem_iter.read().unwrap();
-            let elem_size = elem.get_fix_size().x;
-            if count_elements_size + elem_size > self.fix_size.x {
+            let elem_size = elem.get_fix_size().y;
+            if count_elements_size + elem_size > self.fix_size.y {
                 break;
             }
 
             elem.draw(
                 canvas,
                 &UiPos {
-                    x: cv_pos.x + count_elements_size as i32,
-                    y: cv_pos.y,
+                    x: cv_pos.x ,
+                    y: cv_pos.y + count_elements_size as i32,
                 },
             );
 
@@ -146,7 +146,7 @@ impl UiElem for UiHorizontal {
     fn set_fix_size(&mut self, size: UiFixSize) {
         self.fix_size = size;
         if self.elements.len() == 0 {
-            self.fix_size.x = 0;
+            self.fix_size.y = 0;
         } else {
             self.calculate_children_size();
         }
