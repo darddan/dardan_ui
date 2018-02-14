@@ -3,7 +3,7 @@ use {UiAttr, UiCol, UiElem, UiFixSize, UiParam, UiPos, UiSize};
 pub struct UiFill {
     size: UiSize,
     fix_size: UiFixSize,
-    background_color: UiCol,
+    background_color: ::sdl2::pixels::Color,
 }
 
 impl UiFill {
@@ -11,23 +11,24 @@ impl UiFill {
         UiFill {
             size: UiSize::new(),
             fix_size: UiFixSize::new(),
-            background_color: UiCol::new(255, 255, 255, 255),
+            background_color: UiCol::new(255, 255, 255, 255).sdl2(),
         }
+    }
+    pub fn set_background_color(&mut self, color: UiCol) {
+        self.background_color = color.sdl2();
     }
 }
 
 impl UiElem for UiFill {
     fn draw(&self, canvas: &mut ::sdl2::render::Canvas<::sdl2::video::Window>, cv_pos: &UiPos) {
-        canvas.set_draw_color(self.background_color.sdl2());
-        let rect = ::sdl2::rect::Rect::new(cv_pos.x, cv_pos.y, self.fix_size.x, self.fix_size.y);
-        let _ = canvas.fill_rect(rect);
+        ::util::draw_rect(canvas, cv_pos, &self.fix_size, self.background_color);
     }
 
     fn set_attribute(&mut self, attr: UiAttr) {
         match attr {
-            UiAttr::Size(val) => self.size = val,
-            UiAttr::FixSize(val) => self.fix_size = val,
-            UiAttr::BackgroundColor(val) => self.background_color = val,
+            UiAttr::Size(val) => self.set_size(val),
+            UiAttr::FixSize(val) => self.set_fix_size(val),
+            UiAttr::BackgroundColor(val) => self.set_background_color(val),
             _ => (),
         }
     }

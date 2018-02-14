@@ -1,5 +1,7 @@
 extern crate sdl2;
 
+mod util;
+
 mod baset;
 pub use baset::UiDirection;
 pub use baset::UiRelSize;
@@ -15,5 +17,4 @@ pub use base::param::UiParam;
 mod app;
 pub use app::UiApp;
 
-pub mod combos;
 pub mod elements;
