@@ -1,7 +1,7 @@
 use UiCell;
 
 use {UiElem, UiFixSize, UiPos};
-use items::UiEmptyItem;
+use elements::UiFill;
 
 use sdl2::{EventPump, Sdl, VideoSubsystem};
 use sdl2::event::{Event, WindowEvent};
@@ -27,7 +27,7 @@ impl UiApp {
             subsystem: video_subsystem,
             name: String::from("Ui Application"),
             size: UiFixSize { x: 400, y: 400 },
-            main_element: ::new_ui_cell(UiEmptyItem::new()),
+            main_element: ::new_ui_cell(UiFill::new()),
         }
     }
 

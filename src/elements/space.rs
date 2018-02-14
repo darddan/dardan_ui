@@ -1,30 +1,28 @@
-use sdl2::render::Canvas;
-use sdl2::video::Window;
-
 use {UiAttr, UiElem, UiFixSize, UiParam, UiPos, UiSize};
 
-pub struct UiEmptyItem {
+pub struct UiSpace {
     size: UiSize,
     fix_size: UiFixSize,
 }
 
-impl UiEmptyItem {
+impl UiSpace {
     pub fn new() -> Self {
-        UiEmptyItem {
+        UiSpace {
             size: UiSize::new(),
             fix_size: UiFixSize::new(),
         }
     }
 }
 
-impl UiElem for UiEmptyItem {
-    fn draw(&self, _canvas: &mut Canvas<Window>, _cv_pos: &UiPos) {
+impl UiElem for UiSpace {
+    fn draw(&self, _canvas: &mut ::sdl2::render::Canvas<::sdl2::video::Window>, _cv_pos: &UiPos) {
         // Do Nothing
     }
 
     fn set_attribute(&mut self, attr: UiAttr) {
         match attr {
             UiAttr::Size(val) => self.size = val,
+            UiAttr::FixSize(val) => self.fix_size = val,
             _ => (),
         }
     }
