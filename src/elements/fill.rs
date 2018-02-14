@@ -3,6 +3,7 @@ use {UiAttr, UiCol, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
 pub struct UiFill {
     size: UiSize,
     fix_size: UiFixSize,
+    needed_size: UiFixSize,
     background_color: ::sdl2::pixels::Color,
 }
 
@@ -11,6 +12,7 @@ impl UiFill {
         UiFill {
             size: UiSize::new(),
             fix_size: UiFixSize::new(),
+            needed_size: UiFixSize::new(),
             background_color: UiCol::new(255, 255, 255, 255).sdl2(),
         }
     }
@@ -40,7 +42,12 @@ impl UiElem for UiFill {
         }
     }
 
-    define_size_functions!(Size: size);
+    ui_define_size_functions!(Size: size myself {
+        myself.needed_size.x = ::elements::get_needed_val(myself.size.x);
+        myself.needed_size.y = ::elements::get_needed_val(myself.size.y);
+    });
     
-    define_size_functions!(FixSize: fix_size);
+    ui_define_size_functions!(FixSize: fix_size);
+
+    ui_define_size_functions!(NeededSize: needed_size);
 }

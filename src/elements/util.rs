@@ -1,18 +1,21 @@
-macro_rules! define_size_functions {
+macro_rules! ui_define_size_functions {
     (Size: $struct_var:ident) => (
-        define_size_functions!(Size: $struct_var {});
+        ui_define_size_functions!(Size: $struct_var _no_self {});
     );
-    (Size: $struct_var:ident $run_on_set:block) => (    
+    (Size: $struct_var:ident $self_var:ident $run_on_set:block) => (    
         fn set_size(&mut self, size: UiSize) {
             self.$struct_var = size;
+            let $self_var = self;
             $run_on_set;
         }
         fn set_x(&mut self, x: UiSizeVal) {
             self.$struct_var.x = x;
+            let $self_var = self;
             $run_on_set;
         }
         fn set_y(&mut self, y: UiSizeVal) {
             self.$struct_var.y = y;
+            let $self_var = self;
             $run_on_set;
         }
         fn get_size(&self) -> UiSize {
@@ -26,7 +29,7 @@ macro_rules! define_size_functions {
         }
     );
     (FixSize: $struct_var:ident) => (
-        define_size_functions!(FixSize: $struct_var _no_self {});
+        ui_define_size_functions!(FixSize: $struct_var _no_self {});
     );
     (FixSize: $struct_var:ident $self_var:ident $run_on_set:block) => (    
         fn set_fix_size(&mut self, size: UiFixSize) {
@@ -54,5 +57,22 @@ macro_rules! define_size_functions {
             self.$struct_var.y
         }
     );
+    (NeededSize: $struct_var:ident) => ( 
+        fn get_needed_size(&self) -> UiFixSize {
+            self.$struct_var.clone()
+        }
+        fn get_needed_x(&self) -> u32 {
+            self.$struct_var.x
+        }
+        fn get_needed_y(&self) -> u32 {
+            println!("Asked for val {}", self.$struct_var.y);
+            self.$struct_var.y
+        }
+    );
     ($fn_type:ty : $struct_var:ident) => ();
+}
+
+#[inline(always)]
+pub fn get_needed_val(size : ::UiSizeVal) -> u32 {
+    if let ::UiSizeVal::Px(val) = size { val } else { 0 }
 }

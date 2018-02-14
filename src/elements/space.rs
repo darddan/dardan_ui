@@ -3,6 +3,7 @@ use {UiAttr, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
 pub struct UiSpace {
     size: UiSize,
     fix_size: UiFixSize,
+    needed_size: UiFixSize,
 }
 
 impl UiSpace {
@@ -10,6 +11,7 @@ impl UiSpace {
         UiSpace {
             size: UiSize::new(),
             fix_size: UiFixSize::new(),
+            needed_size: UiFixSize::new(),
         }
     }
 }
@@ -34,7 +36,12 @@ impl UiElem for UiSpace {
         }
     }
 
-    define_size_functions!(Size: size);
-    
-    define_size_functions!(FixSize: fix_size);
+    ui_define_size_functions!(Size: size myself {
+        myself.needed_size.x = ::elements::get_needed_val(myself.size.x);
+        myself.needed_size.y = ::elements::get_needed_val(myself.size.y);
+    });
+
+    ui_define_size_functions!(FixSize: fix_size);
+
+    ui_define_size_functions!(NeededSize: needed_size);
 }

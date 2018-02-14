@@ -5,6 +5,7 @@ pub struct UiVertical {
     background_color: ::sdl2::pixels::Color,
     size: UiSize,
     fix_size: UiFixSize,
+    needed_size: UiFixSize,
 }
 
 impl UiVertical {
@@ -14,6 +15,7 @@ impl UiVertical {
             background_color: ::sdl2::pixels::Color::RGBA(0, 0, 0, 0),
             size: UiSize::new(),
             fix_size: UiFixSize::new(),
+            needed_size: UiFixSize::new(),
         }
     }
 
@@ -22,7 +24,8 @@ impl UiVertical {
         self.calculate_children_size();
     }
 
-    fn calculate_children_size(&mut self) {        
+    fn calculate_children_size(&mut self) {
+        let mut max_x_value = 0;
         let mut num_of_elements_rel: u32 = 0;
 
         let mut sum_of_elements_px: u32 = 0;
@@ -40,11 +43,18 @@ impl UiVertical {
                     num_of_elements_rel += 1;
                     sum_of_elements_rel += 1;
                 }
-                UiSizeVal::Min => (), // TODO: Implement me
                 UiSizeVal::Rel(val) => {
                     elem_queue.push(elem.clone());
                     num_of_elements_rel += 1;
                     sum_of_elements_rel += val as u32;
+                }
+                UiSizeVal::Min => {
+                    let val = borrowed_element.get_needed_y();
+                    borrowed_element.set_fix_size(UiFixSize {
+                        x: self.fix_size.x,
+                        y: val,
+                    });
+                    sum_of_elements_px += val;
                 }
                 UiSizeVal::Px(val) => {
                     borrowed_element.set_fix_size(UiFixSize {
@@ -52,6 +62,12 @@ impl UiVertical {
                         y: val,
                     });
                     sum_of_elements_px += val;
+                }
+            }
+
+            if let UiSizeVal::Px(val) = borrowed_element.get_size().x {
+                if val > max_x_value {
+                    max_x_value = val;
                 }
             }
         }
@@ -62,12 +78,14 @@ impl UiVertical {
             self.fix_size.y - sum_of_elements_px
         };
 
-        if num_of_elements_rel == 0 {
-            self.fix_size.y = sum_of_elements_px;
+        if size_left_for_relatives == 0 {
+            let y_val = self.fix_size.y;
+            self.set_my_sizes(y_val, max_x_value);
             return;
         }
 
-        if size_left_for_relatives == 0 {
+        if num_of_elements_rel == 0 {
+            self.set_my_sizes(sum_of_elements_px, max_x_value);
             return;
         }
 
@@ -84,7 +102,7 @@ impl UiVertical {
                         y: new_y,
                     });
                     sum_of_elements_px += new_y;
-                },
+                }
                 UiSizeVal::Rel(val) => {
                     let new_y = (val as f32 * rel_multiplier) as u32;
                     elem.set_fix_size(UiFixSize {
@@ -92,11 +110,25 @@ impl UiVertical {
                         y: new_y,
                     });
                     sum_of_elements_px += new_y;
-                },
+                }
                 _ => (),
             }
         }
-        self.fix_size.y = sum_of_elements_px;
+        self.set_my_sizes(sum_of_elements_px, max_x_value);
+    }
+
+    fn set_my_sizes(&mut self, sum_of_elements_px: u32, max_x_value: u32) {
+        let mut needed_size = UiFixSize::new();
+        needed_size.x = ::elements::get_needed_val(self.size.x);
+        needed_size.y = ::elements::get_needed_val(self.size.y);
+
+        if needed_size.x == 0 {
+            self.needed_size.x = max_x_value;
+        }
+
+        if needed_size.y == 0 {
+            self.needed_size.y = sum_of_elements_px;
+        }
     }
 
     pub fn set_background_color(&mut self, color: UiCol) {
@@ -119,7 +151,7 @@ impl UiElem for UiVertical {
             elem.draw(
                 canvas,
                 &UiPos {
-                    x: cv_pos.x ,
+                    x: cv_pos.x,
                     y: cv_pos.y + count_elements_size as i32,
                 },
             );
@@ -144,13 +176,23 @@ impl UiElem for UiVertical {
         }
     }
 
-    define_size_functions!(Size: size);
+    ui_define_size_functions!(Size: size myself {
+        if myself.elements.len() != 0 {
+            let used_var = ::elements::get_needed_val(myself.size.x);
+            if used_var != 0 { myself.needed_size.x = used_var }
 
-    define_size_functions!(FixSize: fix_size myself {
+            let used_var = ::elements::get_needed_val(myself.size.y);
+            if used_var != 0 { myself.needed_size.y = used_var }
+        }
+    });
+
+    ui_define_size_functions!(FixSize: fix_size myself {
         if myself.elements.len() == 0 {
             myself.fix_size.x = 0;
         } else {
             myself.calculate_children_size();
         }
     });
+
+    ui_define_size_functions!(NeededSize: needed_size);
 }

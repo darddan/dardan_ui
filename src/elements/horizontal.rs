@@ -5,6 +5,7 @@ pub struct UiHorizontal {
     background_color: ::sdl2::pixels::Color,
     size: UiSize,
     fix_size: UiFixSize,
+    needed_size: UiFixSize,
 }
 
 impl UiHorizontal {
@@ -14,6 +15,7 @@ impl UiHorizontal {
             background_color: ::sdl2::pixels::Color::RGBA(0, 0, 0, 0),
             size: UiSize::new(),
             fix_size: UiFixSize::new(),
+            needed_size: UiFixSize::new(),
         }
     }
 
@@ -23,6 +25,7 @@ impl UiHorizontal {
     }
 
     fn calculate_children_size(&mut self) {
+        let mut max_y_value = 0;
         let mut num_of_elements_rel: u32 = 0;
 
         let mut sum_of_elements_px: u32 = 0;
@@ -40,11 +43,18 @@ impl UiHorizontal {
                     num_of_elements_rel += 1;
                     sum_of_elements_rel += 1;
                 }
-                UiSizeVal::Min => (), // TODO: Implement me
                 UiSizeVal::Rel(val) => {
                     elem_queue.push(elem.clone());
                     num_of_elements_rel += 1;
                     sum_of_elements_rel += val as u32;
+                }
+                UiSizeVal::Min => {
+                    let val = borrowed_element.get_needed_x();
+                    borrowed_element.set_fix_size(UiFixSize {
+                        x: val,
+                        y: self.fix_size.y,
+                    });
+                    sum_of_elements_px += val;
                 }
                 UiSizeVal::Px(val) => {
                     borrowed_element.set_fix_size(UiFixSize {
@@ -52,6 +62,12 @@ impl UiHorizontal {
                         y: self.fix_size.y,
                     });
                     sum_of_elements_px += val;
+                }
+            }
+
+            if let UiSizeVal::Px(val) = borrowed_element.get_size().y {
+                if val > max_y_value {
+                    max_y_value = val;
                 }
             }
         }
@@ -62,12 +78,14 @@ impl UiHorizontal {
             self.fix_size.x - sum_of_elements_px
         };
 
-        if num_of_elements_rel == 0 {
-            self.fix_size.x = sum_of_elements_px;
+        if size_left_for_relatives == 0 {
+            let x_val = self.fix_size.x;
+            self.set_my_sizes(x_val, max_y_value);
             return;
         }
 
-        if size_left_for_relatives == 0 {
+        if num_of_elements_rel == 0 {
+            self.set_my_sizes(sum_of_elements_px, max_y_value);
             return;
         }
 
@@ -84,19 +102,33 @@ impl UiHorizontal {
                         y: self.fix_size.y,
                     });
                     sum_of_elements_px += new_x;
-                },
-                UiSizeVal::Rel(val) =>{
+                }
+                UiSizeVal::Rel(val) => {
                     let new_x = (val as f32 * rel_multiplier) as u32;
                     elem.set_fix_size(UiFixSize {
                         x: new_x,
                         y: self.fix_size.y,
                     });
                     sum_of_elements_px += new_x;
-                },
+                }
                 _ => (),
             }
         }
-        self.fix_size.x = sum_of_elements_px;
+        self.set_my_sizes(sum_of_elements_px, max_y_value);
+    }
+
+    fn set_my_sizes(&mut self, sum_of_elements_px: u32, max_y_value: u32) {
+        let mut needed_size = UiFixSize::new();
+        needed_size.x = ::elements::get_needed_val(self.size.x);
+        needed_size.y = ::elements::get_needed_val(self.size.y);
+
+        if needed_size.x == 0 {
+            self.needed_size.x = sum_of_elements_px;
+        }
+
+        if needed_size.y == 0 {
+            self.needed_size.y = max_y_value;
+        }
     }
 
     pub fn set_background_color(&mut self, color: UiCol) {
@@ -144,12 +176,23 @@ impl UiElem for UiHorizontal {
         }
     }
 
-    define_size_functions!(Size: size);
-    define_size_functions!(FixSize: fix_size myself {
+    ui_define_size_functions!(Size: size myself {
+        if myself.elements.len() != 0 {
+            let used_var = ::elements::get_needed_val(myself.size.x);
+            if used_var != 0 { myself.needed_size.x = used_var }
+
+            let used_var = ::elements::get_needed_val(myself.size.y);
+            if used_var != 0 { myself.needed_size.y = used_var }
+        }
+    });
+
+    ui_define_size_functions!(FixSize: fix_size myself {
         if myself.elements.len() == 0 {
             myself.fix_size.x = 0;
         } else {
             myself.calculate_children_size();
         }
     });
+
+    ui_define_size_functions!(NeededSize: needed_size);
 }

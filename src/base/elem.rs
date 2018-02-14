@@ -29,4 +29,7 @@ pub trait UiElem {
     fn get_fix_size(&self) -> UiFixSize;
     fn get_fix_x(&self) -> u32;
     fn get_fix_y(&self) -> u32;
+    fn get_needed_size(&self) -> UiFixSize;
+    fn get_needed_x(&self) -> u32;
+    fn get_needed_y(&self) -> u32;
 }
