@@ -65,7 +65,6 @@ macro_rules! ui_define_size_functions {
             self.$struct_var.x
         }
         fn get_needed_y(&self) -> u32 {
-            println!("Asked for val {}", self.$struct_var.y);
             self.$struct_var.y
         }
     );
