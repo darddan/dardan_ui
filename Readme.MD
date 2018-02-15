@@ -3,6 +3,8 @@
 [![Crates.io](https://img.shields.io/crates/v/dardan_ui.svg)](https://crates.io/crates/dardan_ui)
 [![Crates.io](https://img.shields.io/crates/l/dardan_ui.svg)](https://crates.io/crates/dardan_ui)
 [![Crates.io](https://img.shields.io/crates/d/dardan_ui.svg)](https://crates.io/crates/dardan_ui)
+[![Travis](https://img.shields.io/travis/dardanos/dardan_ui/dev.svg)](https://travis-ci.org/dardanos/dardan_ui)
+
 
 
 **dardan_ui** is a simple GUI Toolkit based on [SDL2](https://github.com/Rust-SDL2/rust-sdl2). The library should be simple to use and be similar to a GUI Toolkit of an OO language.
@@ -37,26 +39,24 @@ pub fn main() {
 ```rust
 extern crate dardan_ui;
 
-use std::rc::Rc;
-use std::cell::RefCell;
-
-use dardan_ui::{UiApp, UiColor, UiPair, UiRelSize, UiUnit};
-use dardan_ui::combos::UiRowCombo;
+use dardan_ui::{new_ui_cell, UiApp, UiCol, UiElem, UiSizeVal};
+use dardan_ui::elements::{UiFill, UiHorizontal};
 
 pub fn main() {
     let mut app = UiApp::new();
 
-    let mut main_container = UiRowCombo::new();
+    let mut main_container = UiHorizontal::new();
 
-    let mut sidebar = UiRowCombo::new();
-    sidebar.set_background_color(UiColor::salmon());
-    main_container.add_child(UiRelSize::Px(200), Rc::new(RefCell::new(sidebar)));
+    let mut fst_child = UiFill::new();
+    fst_child.set_background_color(UiCol::salmon());
+    fst_child.set_x(UiSizeVal::Px(250));
+    main_container.add_child(new_ui_cell(fst_child));
 
-    let mut sector = UiRowCombo::new();
-    sector.set_background_color(UiColor::red());
-    main_container.add_child(UiRelSize::Max, Rc::new(RefCell::new(sector)));
+    let mut snd_child = UiFill::new();
+    snd_child.set_background_color(UiCol::red());
+    main_container.add_child(new_ui_cell(snd_child));
 
-    app.set_main_element(Rc::new(RefCell::new(main_container)));
+    app.set_main_element(new_ui_cell(main_container));
 
     app.run();
 }
