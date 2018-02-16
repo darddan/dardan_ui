@@ -41,7 +41,7 @@ impl UiApp {
 
     pub fn run(&mut self) {
         let window = self.subsystem
-            .window(&self.name, 500, 500)
+            .window(&self.name, self.size.x, self.size.y)
             .resizable()
             .build()
             .unwrap();
