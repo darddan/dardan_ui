@@ -46,7 +46,7 @@ impl UiElem for UiFill {
         myself.needed_size.x = crate::elements::get_needed_val(myself.size.x);
         myself.needed_size.y = crate::elements::get_needed_val(myself.size.y);
     });
-    
+
     ui_define_size_functions!(FixSize: fix_size);
 
     ui_define_size_functions!(NeededSize: needed_size);

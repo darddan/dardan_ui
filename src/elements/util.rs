@@ -2,7 +2,7 @@ macro_rules! ui_define_size_functions {
     (Size: $struct_var:ident) => (
         ui_define_size_functions!(Size: $struct_var _no_self {});
     );
-    (Size: $struct_var:ident $self_var:ident $run_on_set:block) => (    
+    (Size: $struct_var:ident $self_var:ident $run_on_set:block) => (
         fn set_size(&mut self, size: UiSize) {
             self.$struct_var = size;
             let $self_var = self;
@@ -31,7 +31,7 @@ macro_rules! ui_define_size_functions {
     (FixSize: $struct_var:ident) => (
         ui_define_size_functions!(FixSize: $struct_var _no_self {});
     );
-    (FixSize: $struct_var:ident $self_var:ident $run_on_set:block) => (    
+    (FixSize: $struct_var:ident $self_var:ident $run_on_set:block) => (
         fn set_fix_size(&mut self, size: UiFixSize) {
             self.$struct_var = size;
             let $self_var = self;
@@ -57,7 +57,7 @@ macro_rules! ui_define_size_functions {
             self.$struct_var.y
         }
     );
-    (NeededSize: $struct_var:ident) => ( 
+    (NeededSize: $struct_var:ident) => (
         fn get_needed_size(&self) -> UiFixSize {
             self.$struct_var.clone()
         }
@@ -72,6 +72,10 @@ macro_rules! ui_define_size_functions {
 }
 
 #[inline(always)]
-pub fn get_needed_val(size : crate::UiSizeVal) -> u32 {
-    if let crate::UiSizeVal::Px(val) = size { val } else { 0 }
+pub fn get_needed_val(size: crate::UiSizeVal) -> u32 {
+    if let crate::UiSizeVal::Px(val) = size {
+        val
+    } else {
+        0
+    }
 }

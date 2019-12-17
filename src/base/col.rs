@@ -7,7 +7,6 @@ pub struct UiCol {
     pub a: u8,
 }
 
-
 macro_rules! def_color_value_setter {
     ($($fn_name:ident: $fn_param:ident),+) => (
         $(pub fn $fn_name(mut self, $fn_param : u8) -> Self {

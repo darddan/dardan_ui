@@ -1,12 +1,12 @@
-use crate::{UiElem, UiFixSize, UiPos, UiCell};
 use crate::elements::UiFill;
+use crate::{UiCell, UiElem, UiFixSize, UiPos};
 
-use sdl2::{EventPump, Sdl, VideoSubsystem};
 use sdl2::event::{Event, WindowEvent};
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::render::{BlendMode, Canvas};
 use sdl2::video::Window;
+use sdl2::{EventPump, Sdl, VideoSubsystem};
 
 pub struct UiApp {
     name: String,
@@ -29,7 +29,7 @@ impl UiApp {
             size: UiFixSize { x: 400, y: 400 },
             main_element: crate::new_ui_cell(UiFill::new()),
             fps_counter: 0,
-            fps_counter_last_reset: ::std::time::SystemTime::now()
+            fps_counter_last_reset: ::std::time::SystemTime::now(),
         }
     }
 
@@ -42,7 +42,8 @@ impl UiApp {
     }
 
     pub fn run(&mut self) {
-        let window = self.subsystem
+        let window = self
+            .subsystem
             .window(&self.name, self.size.x, self.size.y)
             .resizable()
             .build()
@@ -67,8 +68,8 @@ impl UiApp {
         'running: loop {
             for event in event_pump.poll_iter() {
                 match event {
-                    Event::Quit { .. } |
-                    Event::KeyDown {
+                    Event::Quit { .. }
+                    | Event::KeyDown {
                         keycode: Some(Keycode::Escape),
                         ..
                     } => break 'running,
@@ -92,7 +93,9 @@ impl UiApp {
             self.fps_counter += 1;
             if self.fps_counter >= 60 {
                 let new_time = ::std::time::SystemTime::now();
-                let secs_diff = new_time.duration_since(self.fps_counter_last_reset).unwrap();
+                let secs_diff = new_time
+                    .duration_since(self.fps_counter_last_reset)
+                    .unwrap();
                 println!("60 FPS in {:?}", secs_diff);
                 self.fps_counter = 0;
                 self.fps_counter_last_reset = new_time;

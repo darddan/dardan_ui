@@ -1,8 +1,8 @@
 use crate::{UiFixSize, UiPos};
-use sdl2::video::Window;
-use sdl2::render::Canvas;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use sdl2::render::Canvas;
+use sdl2::video::Window;
 
 #[inline(always)]
 pub fn draw_rect(canvas: &mut Canvas<Window>, cv_pos: &UiPos, size: &UiFixSize, color: Color) {

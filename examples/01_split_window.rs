@@ -1,7 +1,7 @@
 extern crate dardan_ui;
 
-use dardan_ui::{new_ui_cell, UiApp, UiCol, UiElem, UiSizeVal};
 use dardan_ui::elements::{UiFill, UiHorizontal};
+use dardan_ui::{new_ui_cell, UiApp, UiCol, UiElem, UiSizeVal};
 
 pub fn main() {
     let mut app = UiApp::new();
