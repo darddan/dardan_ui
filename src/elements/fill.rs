@@ -39,9 +39,8 @@ impl UiElem for UiFill {
     }
 
     fn set_value(&mut self, value: UiParam) {
-        match value {
-            UiParam::Attr(attr) => self.set_attribute(attr),
-            _ => (),
+        if let UiParam::Attr(attr) = value {
+            self.set_attribute(attr);
         }
     }
 

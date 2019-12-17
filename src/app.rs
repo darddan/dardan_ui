@@ -32,7 +32,6 @@ impl Default for UiApp {
             fps_counter_last_reset: ::std::time::SystemTime::now(),
         }
     }
-
 }
 
 impl UiApp {

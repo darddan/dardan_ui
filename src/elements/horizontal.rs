@@ -179,7 +179,7 @@ impl UiElem for UiHorizontal {
     }
 
     ui_define_size_functions!(Size: size myself {
-        if myself.elements.len() != 0 {
+        if !myself.elements.is_empty() {
             let used_var = crate::elements::get_needed_val(myself.size.x);
             if used_var != 0 { myself.needed_size.x = used_var }
 
@@ -189,7 +189,7 @@ impl UiElem for UiHorizontal {
     });
 
     ui_define_size_functions!(FixSize: fix_size myself {
-        if myself.elements.len() == 0 {
+        if myself.elements.is_empty() {
             myself.fix_size.x = 0;
         } else {
             myself.calculate_children_size();
