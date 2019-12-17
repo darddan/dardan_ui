@@ -72,6 +72,6 @@ macro_rules! ui_define_size_functions {
 }
 
 #[inline(always)]
-pub fn get_needed_val(size : ::UiSizeVal) -> u32 {
-    if let ::UiSizeVal::Px(val) = size { val } else { 0 }
+pub fn get_needed_val(size : crate::UiSizeVal) -> u32 {
+    if let crate::UiSizeVal::Px(val) = size { val } else { 0 }
 }

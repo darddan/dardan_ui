@@ -1,7 +1,5 @@
-use UiCell;
-
-use {UiElem, UiFixSize, UiPos};
-use elements::UiFill;
+use crate::{UiElem, UiFixSize, UiPos, UiCell};
+use crate::elements::UiFill;
 
 use sdl2::{EventPump, Sdl, VideoSubsystem};
 use sdl2::event::{Event, WindowEvent};
@@ -13,9 +11,11 @@ use sdl2::video::Window;
 pub struct UiApp {
     name: String,
     size: UiFixSize,
-    main_element: UiCell<UiElem>,
+    main_element: UiCell<dyn UiElem>,
     context: Sdl,
     subsystem: VideoSubsystem,
+    fps_counter: u128,
+    fps_counter_last_reset: ::std::time::SystemTime,
 }
 
 impl UiApp {
@@ -27,7 +27,9 @@ impl UiApp {
             subsystem: video_subsystem,
             name: String::from("Ui Application"),
             size: UiFixSize { x: 400, y: 400 },
-            main_element: ::new_ui_cell(UiFill::new()),
+            main_element: crate::new_ui_cell(UiFill::new()),
+            fps_counter: 0,
+            fps_counter_last_reset: ::std::time::SystemTime::now()
         }
     }
 
@@ -35,7 +37,7 @@ impl UiApp {
         self.name = name;
     }
 
-    pub fn set_main_element(&mut self, main_element: UiCell<UiElem>) {
+    pub fn set_main_element(&mut self, main_element: UiCell<dyn UiElem>) {
         self.main_element = main_element;
     }
 
@@ -86,6 +88,15 @@ impl UiApp {
             }
 
             canvas.present();
+
+            self.fps_counter += 1;
+            if self.fps_counter >= 60 {
+                let new_time = ::std::time::SystemTime::now();
+                let secs_diff = new_time.duration_since(self.fps_counter_last_reset).unwrap();
+                println!("60 FPS in {:?}", secs_diff);
+                self.fps_counter = 0;
+                self.fps_counter_last_reset = new_time;
+            }
 
             ::std::thread::sleep(::std::time::Duration::new(0, 1_000_000_000u32 / 60));
         }

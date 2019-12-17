@@ -1,6 +1,6 @@
-use {UiAttr, UiCell, UiElem};
+use crate::{UiAttr, UiCell, UiElem};
 
 pub enum UiParam {
     Attr(UiAttr),
-    Child(UiCell<UiElem>),
+    Child(UiCell<dyn UiElem>),
 }

@@ -1,4 +1,4 @@
-use {UiFixSize, UiPos};
+use crate::{UiFixSize, UiPos};
 use sdl2::video::Window;
 use sdl2::render::Canvas;
 use sdl2::pixels::Color;

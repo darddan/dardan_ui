@@ -1,4 +1,4 @@
-use {UiCol, UiFixSize, UiSize};
+use crate::{UiCol, UiFixSize, UiSize};
 
 pub enum UiAttr {
     BackgroundColor(UiCol),

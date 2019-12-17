@@ -1,4 +1,4 @@
-use {UiAttr, UiCol, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
+use crate::{UiAttr, UiCol, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
 
 pub struct UiFill {
     size: UiSize,
@@ -23,7 +23,7 @@ impl UiFill {
 
 impl UiElem for UiFill {
     fn draw(&self, canvas: &mut ::sdl2::render::Canvas<::sdl2::video::Window>, cv_pos: &UiPos) {
-        ::util::draw_rect(canvas, cv_pos, &self.fix_size, self.background_color);
+        crate::util::draw_rect(canvas, cv_pos, &self.fix_size, self.background_color);
     }
 
     fn set_attribute(&mut self, attr: UiAttr) {
@@ -43,8 +43,8 @@ impl UiElem for UiFill {
     }
 
     ui_define_size_functions!(Size: size myself {
-        myself.needed_size.x = ::elements::get_needed_val(myself.size.x);
-        myself.needed_size.y = ::elements::get_needed_val(myself.size.y);
+        myself.needed_size.x = crate::elements::get_needed_val(myself.size.x);
+        myself.needed_size.y = crate::elements::get_needed_val(myself.size.y);
     });
     
     ui_define_size_functions!(FixSize: fix_size);

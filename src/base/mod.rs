@@ -4,3 +4,5 @@ pub mod size_units;
 pub mod cell;
 pub mod attr;
 pub mod param;
+
+pub mod size;

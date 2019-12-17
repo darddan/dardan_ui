@@ -1,4 +1,4 @@
-use {UiAttr, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
+use crate::{UiAttr, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
 
 pub struct UiSpace {
     size: UiSize,
@@ -37,8 +37,8 @@ impl UiElem for UiSpace {
     }
 
     ui_define_size_functions!(Size: size myself {
-        myself.needed_size.x = ::elements::get_needed_val(myself.size.x);
-        myself.needed_size.y = ::elements::get_needed_val(myself.size.y);
+        myself.needed_size.x = crate::elements::get_needed_val(myself.size.x);
+        myself.needed_size.y = crate::elements::get_needed_val(myself.size.y);
     });
 
     ui_define_size_functions!(FixSize: fix_size);

@@ -4,5 +4,7 @@ version = "0.1.1"
 authors = ["Dardan <mail@dardan.im>"]
 description = "A simple GUI Toolkit based on SDL2. The goal is for it to be easy to use and be similar to GUI Toolkits for OO languages."
 license = "MIT"
+edition = "2018"
+
 [dependencies]
 sdl2 = "0.31.0"

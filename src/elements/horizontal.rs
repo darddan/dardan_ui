@@ -1,7 +1,7 @@
-use {UiAttr, UiCell, UiCol, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
+use crate::{UiAttr, UiCell, UiCol, UiElem, UiFixSize, UiParam, UiPos, UiSize, UiSizeVal};
 
 pub struct UiHorizontal {
-    elements: Vec<UiCell<UiElem>>,
+    elements: Vec<UiCell<dyn UiElem>>,
     background_color: ::sdl2::pixels::Color,
     size: UiSize,
     fix_size: UiFixSize,
@@ -19,7 +19,7 @@ impl UiHorizontal {
         }
     }
 
-    pub fn add_child(&mut self, child: UiCell<UiElem>) {
+    pub fn add_child(&mut self, child: UiCell<dyn UiElem>) {
         self.elements.push(child);
         self.calculate_children_size();
     }
@@ -119,8 +119,8 @@ impl UiHorizontal {
 
     fn set_my_sizes(&mut self, sum_of_elements_px: u32, max_y_value: u32) {
         let mut needed_size = UiFixSize::new();
-        needed_size.x = ::elements::get_needed_val(self.size.x);
-        needed_size.y = ::elements::get_needed_val(self.size.y);
+        needed_size.x = crate::elements::get_needed_val(self.size.x);
+        needed_size.y = crate::elements::get_needed_val(self.size.y);
 
         if needed_size.x == 0 {
             self.needed_size.x = sum_of_elements_px;
@@ -138,7 +138,7 @@ impl UiHorizontal {
 
 impl UiElem for UiHorizontal {
     fn draw(&self, canvas: &mut ::sdl2::render::Canvas<::sdl2::video::Window>, cv_pos: &UiPos) {
-        ::util::draw_rect(canvas, cv_pos, &self.fix_size, self.background_color);
+        crate::util::draw_rect(canvas, cv_pos, &self.fix_size, self.background_color);
 
         let mut count_elements_size = 0;
         for elem_iter in &self.elements {
@@ -178,10 +178,10 @@ impl UiElem for UiHorizontal {
 
     ui_define_size_functions!(Size: size myself {
         if myself.elements.len() != 0 {
-            let used_var = ::elements::get_needed_val(myself.size.x);
+            let used_var = crate::elements::get_needed_val(myself.size.x);
             if used_var != 0 { myself.needed_size.x = used_var }
 
-            let used_var = ::elements::get_needed_val(myself.size.y);
+            let used_var = crate::elements::get_needed_val(myself.size.y);
             if used_var != 0 { myself.needed_size.y = used_var }
         }
     });
