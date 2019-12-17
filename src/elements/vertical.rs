@@ -8,17 +8,19 @@ pub struct UiVertical {
     needed_size: UiFixSize,
 }
 
-impl UiVertical {
-    pub fn new() -> Self {
+impl Default for UiVertical {
+    fn default() -> Self {
         UiVertical {
             elements: vec![],
             background_color: ::sdl2::pixels::Color::RGBA(0, 0, 0, 0),
-            size: UiSize::new(),
-            fix_size: UiFixSize::new(),
-            needed_size: UiFixSize::new(),
+            size: UiSize::default(),
+            fix_size: UiFixSize::default(),
+            needed_size: UiFixSize::default(),
         }
     }
+}
 
+impl UiVertical {
     pub fn add_child(&mut self, child: UiCell<dyn UiElem>) {
         self.elements.push(child);
         self.calculate_children_size();
@@ -118,7 +120,7 @@ impl UiVertical {
     }
 
     fn set_my_sizes(&mut self, sum_of_elements_px: u32, max_x_value: u32) {
-        let mut needed_size = UiFixSize::new();
+        let mut needed_size = UiFixSize::default();
         needed_size.x = crate::elements::get_needed_val(self.size.x);
         needed_size.y = crate::elements::get_needed_val(self.size.y);
 

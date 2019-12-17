@@ -12,8 +12,8 @@ pub struct UiSize {
     pub y: UiSizeVal,
 }
 
-impl UiSize {
-    pub fn new() -> Self {
+impl Default for UiSize {
+    fn default() -> Self {
         UiSize {
             x: UiSizeVal::Max,
             y: UiSizeVal::Max,
@@ -27,8 +27,8 @@ pub struct UiFixSize {
     pub y: u32,
 }
 
-impl UiFixSize {
-    pub fn new() -> Self {
+impl Default for UiFixSize {
+    fn default() -> Self {
         UiFixSize { x: 0, y: 0 }
     }
 }
@@ -39,8 +39,8 @@ pub struct UiPos {
     pub y: i32,
 }
 
-impl UiPos {
-    pub fn new() -> Self {
+impl Default for UiPos {
+    fn default() -> Self {
         UiPos { x: 0, y: 0 }
     }
 }

@@ -6,12 +6,12 @@ pub struct UiSpace {
     needed_size: UiFixSize,
 }
 
-impl UiSpace {
-    pub fn new() -> Self {
+impl Default for UiSpace {
+    fn default() -> Self {
         UiSpace {
-            size: UiSize::new(),
-            fix_size: UiFixSize::new(),
-            needed_size: UiFixSize::new(),
+            size: UiSize::default(),
+            fix_size: UiFixSize::default(),
+            needed_size: UiFixSize::default(),
         }
     }
 }

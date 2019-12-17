@@ -18,8 +18,8 @@ pub struct UiApp {
     fps_counter_last_reset: ::std::time::SystemTime,
 }
 
-impl UiApp {
-    pub fn new() -> Self {
+impl Default for UiApp {
+    fn default() -> Self {
         let sdl_context = ::sdl2::init().unwrap();
         let video_subsystem = sdl_context.video().unwrap();
         UiApp {
@@ -27,12 +27,15 @@ impl UiApp {
             subsystem: video_subsystem,
             name: String::from("Ui Application"),
             size: UiFixSize { x: 400, y: 400 },
-            main_element: crate::new_ui_cell(UiFill::new()),
+            main_element: crate::new_ui_cell(UiFill::default()),
             fps_counter: 0,
             fps_counter_last_reset: ::std::time::SystemTime::now(),
         }
     }
 
+}
+
+impl UiApp {
     pub fn set_title(&mut self, name: String) {
         self.name = name;
     }
@@ -60,7 +63,7 @@ impl UiApp {
 
     #[inline(always)]
     fn handle_loop(&mut self, event_pump: &mut EventPump, mut canvas: &mut Canvas<Window>) {
-        let position = UiPos::new();
+        let position = UiPos::default();
 
         self.set_size();
         self.draw(&mut canvas, &position);

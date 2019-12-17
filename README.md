@@ -30,7 +30,7 @@ extern crate dardan_ui;
 use dardan_ui::UiApp;
 
 pub fn main() {
-    UiApp::new().run();
+    UiApp::default().run();
 }
 ```
 
@@ -43,16 +43,16 @@ use dardan_ui::{new_ui_cell, UiApp, UiCol, UiElem, UiSizeVal};
 use dardan_ui::elements::{UiFill, UiHorizontal};
 
 pub fn main() {
-    let mut app = UiApp::new();
+    let mut app = UiApp::default();
 
-    let mut main_container = UiHorizontal::new();
+    let mut main_container = UiHorizontal::default();
 
-    let mut fst_child = UiFill::new();
+    let mut fst_child = UiFill::default();
     fst_child.set_background_color(UiCol::salmon());
     fst_child.set_x(UiSizeVal::Px(250));
     main_container.add_child(new_ui_cell(fst_child));
 
-    let mut snd_child = UiFill::new();
+    let mut snd_child = UiFill::default();
     snd_child.set_background_color(UiCol::red());
     main_container.add_child(new_ui_cell(snd_child));
 
@@ -85,7 +85,7 @@ ui!(
 );
 
 pub fn main() {
-    let mut app = UiApp::new();
+    let mut app = UiApp::default();
 
     ui!(set_main app main_container);
     

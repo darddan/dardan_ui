@@ -7,15 +7,18 @@ pub struct UiFill {
     background_color: ::sdl2::pixels::Color,
 }
 
-impl UiFill {
-    pub fn new() -> Self {
+impl Default for UiFill {
+    fn default() -> Self {
         UiFill {
-            size: UiSize::new(),
-            fix_size: UiFixSize::new(),
-            needed_size: UiFixSize::new(),
+            size: UiSize::default(),
+            fix_size: UiFixSize::default(),
+            needed_size: UiFixSize::default(),
             background_color: UiCol::new(255, 255, 255, 255).sdl2(),
         }
     }
+}
+
+impl UiFill {
     pub fn set_background_color(&mut self, color: UiCol) {
         self.background_color = color.sdl2();
     }
