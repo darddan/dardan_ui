@@ -84,13 +84,12 @@ impl UiApp {
                             y: y_val as u32,
                         };
                         self.set_size();
-                        self.draw(&mut canvas, &position);
                     }
                     _ => {}
                 }
             }
 
-            canvas.present();
+            self.draw(&mut canvas, &position);
 
             self.fps_counter += 1;
             if self.fps_counter >= 60 {
@@ -103,7 +102,7 @@ impl UiApp {
                 self.fps_counter_last_reset = new_time;
             }
 
-            ::std::thread::sleep(::std::time::Duration::new(0, 1_000_000_000u32 / 60));
+            ::std::thread::sleep(::std::time::Duration::new(0, 1_000_000_000u32 / 70));
         }
     }
 
@@ -112,6 +111,7 @@ impl UiApp {
         canvas.clear();
         let elem = self.main_element.write().unwrap();
         elem.draw(canvas, position);
+        canvas.present();
     }
 
     pub fn set_size(&mut self) {
